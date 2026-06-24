@@ -1,5 +1,5 @@
 exports.repo = "Hug3O/Click-sounds"
-exports.version = 1.3
+exports.version = 1.5
 exports.apiRequired = 12.0
 exports.description = "Mouse hover and click sounds"
 exports.frontend_js = "main.js"
