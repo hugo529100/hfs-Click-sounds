@@ -3,24 +3,30 @@
 const cfg = HFS.getPluginConfig()
 
 function getPluginBasePath() {
-    const scripts = document.getElementsByTagName('script')
-    for (let i = scripts.length - 1; i >= 0; i--) {
-        const src = scripts[i].src
-        if (src && src.includes('/plugins/')) {
-            const match = src.match(/(.*\/plugins\/[^/]+)\//)
+    // 更可靠的方法：使用当前脚本的路径
+    const scripts = document.getElementsByTagName('script');
+    for (let i = 0; i < scripts.length; i++) {
+        const src = scripts[i].src;
+        // 查找包含 Click-sounds 的脚本
+        if (src && src.includes('Click-sounds')) {
+            const match = src.match(/(.*\/plugins\/[^/]+)\//);
             if (match) {
-                return match[1]
+                return match[1];
             }
         }
     }
+    
+    // 备用方案：尝试从当前执行脚本获取
     if (document.currentScript && document.currentScript.src) {
-        const src = document.currentScript.src
-        const match = src.match(/(.*\/plugins\/[^/]+)\//)
+        const src = document.currentScript.src;
+        const match = src.match(/(.*\/plugins\/[^/]+)\//);
         if (match) {
-            return match[1]
+            return match[1];
         }
     }
-    return '/~/plugins/Click-sounds'
+    
+    // 最后的备用路径
+    return '/~/plugins/Click-sounds';
 }
 
 function isTouchDevice() {
@@ -31,6 +37,7 @@ function isTouchDevice() {
 
 const isTouch = isTouchDevice()
 const pluginBasePath = getPluginBasePath()
+console.log('[Click-sounds] Plugin base path:', pluginBasePath) // 调试日志
 
 function getSoundPath(configPath, defaultFile) {
     if (configPath && configPath.trim() !== '') {
@@ -48,7 +55,7 @@ function createPlayer(url) {
     audio.volume = (Number(cfg.volume || 80) / 100)
 
     audio.addEventListener('error', () => {
-        console.error('[mouse-sound] audio load failed:', url)
+        console.error('[Click-sounds] audio load failed:', url)
     })
 
     return audio
@@ -57,6 +64,12 @@ function createPlayer(url) {
 const hoverSoundPath = getSoundPath(cfg.hoverSound, 'hover.mp3')
 const clickSoundPath = getSoundPath(cfg.clickSound, 'click.mp3')
 const loadSoundPath = getSoundPath(cfg.loadSound, 'load.mp3')
+
+console.log('[Click-sounds] Sound paths:', {
+    hover: hoverSoundPath,
+    click: clickSoundPath,
+    load: loadSoundPath
+}) // 调试日志
 
 const hoverAudio = createPlayer(hoverSoundPath)
 const clickAudio = createPlayer(clickSoundPath)
@@ -74,7 +87,7 @@ function play(audio) {
 
         if (p?.catch)
             p.catch(err =>
-                console.error('[mouse-sound] play failed:', err)
+                console.error('[Click-sounds] play failed:', err)
             )
     }
     catch(err) {
