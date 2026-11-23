@@ -1,4 +1,4 @@
-exports.repo = "Hug3O/Click-sounds"
+exports.repo = "hugo529100/hfs-Click-sounds"
 exports.version = 1.6
 exports.apiRequired = 12.0
 exports.description = "Mouse hover and click sounds"
